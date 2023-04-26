@@ -5,10 +5,8 @@ import com.example.demo.dto.FilterDTO;
 import com.example.demo.dto.IstatisticDTO;
 import com.example.demo.dto.MultiColumnChartDTO;
 import com.example.demo.dto.PieChartDTO;
-import com.example.demo.entity.Device;
-import com.example.demo.entity.Evaluation;
-import com.example.demo.entity.Failure;
 import com.example.demo.entity.Process;
+import com.example.demo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -42,6 +40,9 @@ public class DeviceService {
 
     @Autowired
     EvaluationRepository evaluationRepository;
+
+    @Autowired
+    DevicesRepository devicesRepository;
 
     public List<Device> getAllDevices() {
         return deviceRepository.findAll();
@@ -146,13 +147,64 @@ public class DeviceService {
     public Device createDevice(Device device) {
         String brandName = brandRepository.getBrandNameById(device.getBrandId());
         String modelName = modelRepository.getModelNameById(device.getModelId());
-        if(((device.getBrandId()!=null) && (device.getModelId())!=null)) {
+        if (((device.getBrandId() != null) && (device.getModelId()) != null)) {
             device.setBrandName(brandName);
             device.setModelName(modelName);
-        }
-        else
+        } else {
             device.setBrandName(device.getBrandName());
             device.setModelName(device.getModelName());
+
+            Brand brand = new Brand();
+            brand.setName(device.getBrandName());
+            Brand saveBrand = brandRepository.save(brand);
+
+            Model model = new Model();
+            model.setName(device.getModelName());
+            model.setBrandId(saveBrand.getId().toString());
+            Model saveModel = modelRepository.save(model);
+
+            Devices devices = new Devices();
+            devices.setBrandId(saveBrand.getId());
+            devices.setBrandName(device.getBrandName());
+            devices.setModelName(device.getModelName());
+            devices.setAnnounced(device.getAnnounced());
+            devices.setAudioJack(device.getAudioJack());
+            devices.setBattery(device.getBattery());
+            devices.setBluetooth(device.getBluetooth());
+            devices.setChipSet(device.getChipSet());
+            devices.setColor(device.getColor());
+            devices.setCpu(device.getCpu());
+            devices.setDimension(device.getDimension());
+            devices.setDisplayResolution(device.getDisplayResolution());
+            devices.setDisplaySize(device.getDisplaySize());
+            devices.setDisplayType(device.getDisplayType());
+            devices.setEdge(device.getEdge());
+            devices.setFourG(device.getFourG());
+            devices.setGprs(device.getGprs());
+            devices.setInternalMemory(device.getInternalMemory());
+            devices.setLoudSpeaker(device.getLoudSpeaker());
+            devices.setMemoryCard(device.getMemoryCard());
+            devices.setNetworkSpeed(device.getNetworkSpeed());
+            devices.setNfc(device.getNfc());
+            devices.setOperatingSystem(device.getOperatingSystem());
+            devices.setPrimaryCamera(device.getPrimaryCamera());
+            devices.setRadio(device.getRadio());
+            devices.setRam(device.getRam());
+            devices.setSensor(device.getSensor());
+            devices.setSim(device.getSim());
+            devices.setStatus(device.getStatus());
+            devices.setThreeG(device.getThreeG());
+            devices.setThreeG(device.getThreeG());
+            devices.setSecondaryCamera(device.getSecondaryCamera());
+            devices.setTwoG(device.getTwoG());
+            devices.setGps(device.getGps());
+            devices.setUsb(device.getUsb());
+            devices.setWlan(device.getWlan());
+            devices.setGpu(device.getGpu());
+            devices.setNetwork(device.getNetwork());
+            devicesRepository.save(devices);
+        }
+
         return deviceRepository.save(device);
     }
 
@@ -204,7 +256,6 @@ public class DeviceService {
         multiColumnChartDTO.setCategory(categoryList);
         multiColumnChartDTO.setImaj(imajList);
         multiColumnChartDTO.setNotImaj(notImajList);
-
 
         return multiColumnChartDTO;
     }

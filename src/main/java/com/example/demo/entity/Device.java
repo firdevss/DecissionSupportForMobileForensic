@@ -76,6 +76,9 @@ public class Device {
     @Column(name = "GPS")
     private String gps;
 
+    @Column(name = "GPU")
+    private String gpu;
+
     @Column(name = "INTERNAL_MEMORY")
     private String internalMemory;
 
@@ -140,6 +143,14 @@ public class Device {
     private Evaluation evaluation;
 
     public Device() {
+    }
+
+    public String getGpu() {
+        return gpu;
+    }
+
+    public void setGpu(String gpu) {
+        this.gpu = gpu;
     }
 
     public Evaluation getEvaluation() {

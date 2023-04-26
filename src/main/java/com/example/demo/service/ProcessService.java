@@ -6,6 +6,8 @@ import com.example.demo.dto.PieChartDTO;
 import com.example.demo.entity.Process;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +23,9 @@ public class ProcessService {
 
     @Autowired
     DeviceRepository deviceRepository;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Modifying
     @Transactional
@@ -45,6 +50,13 @@ public class ProcessService {
         pieChartDTOList.add(pieChartDTO);
         pieChartDTOList.add(pieChartDTO2);
         return pieChartDTOList;
+    }
+
+    public List<PieChartDTO> getProcessBarChart() {
+        String sql = "SELECT ENTER_PERSON as label, count(*) as value FROM phonedb.process \n" +
+                "where ENTER_PERSON <> '' GROUP BY ENTER_PERSON;";
+        List<PieChartDTO> pieChartDTO = jdbcTemplate.query(sql, new BeanPropertyRowMapper<PieChartDTO>(PieChartDTO.class));
+        return pieChartDTO;
     }
 
 }

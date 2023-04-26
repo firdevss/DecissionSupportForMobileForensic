@@ -48,6 +48,7 @@ public class Devices {
 
     @Column(name = "DISPLAY_SIZE")
     private String displaySize;
+
     @Column(name = "DISPLAY_TYPE")
     private String displayType;
 

@@ -42,4 +42,18 @@ public class EvaluationController {
         return ResponseEntity.accepted().body(vm);
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/getEvaluateChart", method = {RequestMethod.GET})
+    public ResponseEntity<ResultVm> getEvaluateChart() {
+        ResultVm vm = new ResultVm();
+        try {
+            vm.setResultSet(evaluationService.getEvaluateChart());
+            vm.setIsSuccess(true);
+            vm.addMessage("İşlem Başarılı");
+        } catch (Exception e) {
+
+            vm.addMessage(e.getMessage());
+        }
+        return ResponseEntity.accepted().body(vm);
+    }
 }

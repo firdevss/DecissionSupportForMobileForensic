@@ -42,4 +42,19 @@ public class ProcessController {
         }
         return ResponseEntity.accepted().body(vm);
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/getProcessBarChart", method = {RequestMethod.GET})
+    public ResponseEntity<ResultVm> getProcessBarChart() {
+        ResultVm vm = new ResultVm();
+        try {
+            vm.setResultSet(processService.getProcessBarChart());
+            vm.setIsSuccess(true);
+            vm.addMessage("İşlem Başarılı");
+        } catch (Exception e) {
+
+            vm.addMessage(e.getMessage());
+        }
+        return ResponseEntity.accepted().body(vm);
+    }
 }

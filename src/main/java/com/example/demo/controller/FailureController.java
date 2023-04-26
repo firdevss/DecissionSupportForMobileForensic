@@ -28,4 +28,19 @@ public class FailureController {
         return ResponseEntity.accepted().body(vm);
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/getFailureBarChart", method = {RequestMethod.GET})
+    public ResponseEntity<ResultVm> getFailureBarChart() {
+        ResultVm vm = new ResultVm();
+        try {
+            vm.setResultSet(failureService.getFailureBarChart());
+            vm.setIsSuccess(true);
+            vm.addMessage("İşlem Başarılı");
+        } catch (Exception e) {
+
+            vm.addMessage(e.getMessage());
+        }
+        return ResponseEntity.accepted().body(vm);
+    }
+
 }
